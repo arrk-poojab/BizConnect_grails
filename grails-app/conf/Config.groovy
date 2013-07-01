@@ -10,6 +10,7 @@
 // if (System.properties["${appName}.config.location"]) {
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
+import grails.plugins.*
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
@@ -89,8 +90,36 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+grails {
+    mail {
+        to = "smita.gavhane@arrkgroup.com"
+        host = "192.168.2.16"
+        port = 25
+        props = ["mail.smtp.auth":"False","mail.smtp.socketFactory.fallback":"false"]
+    }
+}
+grails.mail.default.from="pooja.bawa@arrkgroup.com"
+log4j.logger.org.springframework.security='off,stdout'
+twitter {
+    disableTwitter4jController = false  // To avoid intruders to use controller alltogether.
+    'default' {
+        OAuthConsumerKey       = 'c3EH0waBCycZ7rbzttYXw'
+        OAuthConsumerSecret    = 'nLdBhBHdaBexyl4WwTKVUbbCkqR9ZJUVUIIEl0rf8'
+        OAuthAccessToken       = '719603797-NE350jCD3CT9dOQIw4EvAIlYr8HjlUof9P3v4ZIS'
+        OAuthAccessTokenSecret = 'mhwoLVaxcLs6yYHyp7GYcYmCUTDS3wUWGjLKBeAONjU'
+    }
+}
 
 
+
+grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
+grails.plugins.springsecurity.interceptUrlMap = [
+        '/timeline':         ['ROLE_USER'],
+        '/person/*':         ['IS_AUTHENTICATED_REMEMBERED'],
+        '/post/followAjax':  ['ROLE_USER'],
+        '/post/addPostAjax': ['ROLE_USER', 'IS_AUTHENTICATED_FULLY'],
+        '/**':               ['IS_AUTHENTICATED_ANONYMOUSLY']
+]
 
 
 // Added by the Spring Security Core plugin:
